@@ -5,65 +5,107 @@ typedef struct no{
     int number;         //number of light pole
     int option;         //option of complaint
     struct no *next, *previous;
-    char name[50];        //name of who made the complaint
-    char description[]; //description of the complaint
+    char description[400]; //description of the complaint
+    char name[];           // name of who made the complaint
 } complaintForm;
 
 complaintForm *create(complaintForm *p){
-    complaintForm *q, *r;
-    complaintForm *primeiro = NULL;
-    int contador = 0, aux = 1;
-    while (contador != 9999 && aux != 0)
+    complaintForm *q, *r, *s;
+    complaintForm *first = NULL;
+    int  aux = 1;
+    while (aux != 0)
     {
-        if (primeiro == NULL)
+        if (first == NULL)
         {
-            primeiro = p;
-            printf("\nDigite o numero de number do(a) aluno(a): ");
-            scanf("%d", &primeiro->number); // Usar scanf("%d%*c, &p->number") como alternativa ao fflush(stdin)
+            first = p;
+            printf("\nDigite o numero de endereco IP do poste de luz: ");
+            scanf("%d", &first->number); // Use scanf("%d%*c, &p->number") as alternative to fflush(stdin)
             fflush(stdin);
-            printf("\nDigite o nome do(a) aluno(a):");
-            fgets(primeiro->nome, 30, stdin);
-            printf("\nDeseja cadastrar mais um aluno(a)?");
+            printf("\nDigite o seu nome: ");
+            gets(first->name);
+            printf("\nCaso deje realizar alguma reclamacao, digite o numero correspondente:");
+            prinft("\n0 - Sem reclamacoes");
+            prinft("\n1 - Luz queimada");
+            prinft("\n2 - Luz piscando");
+            prinft("\n3 - Sem luz");
+            scanf("%d", &first->option);
+            if (first->option == 0){
+                first->description = "Sem reclamacoes";
+            }else{
+                printf("\nDigite a sua reclamacao (maximo de 400 caracteres):  ");
+                fgets(first->description, 400, stdin);
+            }
+            printf("\nDeseja cadastrar mais algum poste?");
             printf("\nDigite 1 - sim; 0 - nao: ");
             scanf("%d", &aux);
-            if (aux == 0)
-            {
-                primeiro->next = NULL;
-                return primeiro;
+            if (aux == 0){
+                first->next = NULL;       //grouding the list
+                first->previous = NULL;
+                return first;
             }
             else
             {
-                q = primeiro;
+                first->previous = NULL;
+                q = first;      //q is now the previous element in the next round
             }
         }
         else
         {
-            r = (complaintForm *)malloc(sizeof(complaintForm));
-            printf("\nDigite o numero de number do(a) aluno(a): ");
-            scanf("%d", &r->number); // Usar scanf("%d%*c, &p->number") como alternativa ao fflush(stdin)
+            r = (complaintForm *)malloc(sizeof(complaintForm));     //alocation of memory
+            printf("\nDigite o numero de endereco IP do poste de luz: ");
+            scanf("%d", &first->number); 
             fflush(stdin);
-            printf("\nDigite o nome do(a) aluno(a):");
-            fgets(r->nome, 30, stdin);
-            q->next = r;
+            printf("\nDigite o seu nome: ");
+            gets(first->name);
+            printf("\nCaso deje realizar alguma reclamacao, digite o numero correspondente:");
+            prinft("\n0 - Sem reclamacoes");
+            prinft("\n1 - Luz queimada");
+            prinft("\n2 - Luz piscando");
+            prinft("\n3 - Sem luz");
+            scanf("%d", &first->option);
+            if (first->option == 0){
+                first->description = "Sem reclamacoes";
+            }else{
+                printf("\nDigite a sua reclamacao (maximo de 400 caracteres):  ");
+                fgets(first->description, 400, stdin);
+            }
+            q->next = r;        //the previous "q" points to next wich is r         
+            q->previous = s;    //and points to previous, wich is s
             printf("\nDeseja cadastrar mais um aluno(a)?");
             printf("\nDigite 1 - sim; 0 - nao: ");
             scanf("%d", &aux);
             if (aux == 0)
             {
                 r->next = NULL;
-                return primeiro;
+                return first;
             }
             else
             {
-                q = r;
+                s = q;      //the previous to q recieves q
+                q = r;      //and q recieves the atual
             }
         }
-        contador = contador++;
     }
-    if (contador == 9999)
-    {
-        return primeiro;
+}
+
+void inserction(complaintForm *p){
+    complaintForm *aux;
+    printf("\nCaso deje realizar alguma reclamacao, digite o numero correspondente:");
+    prinft("\n0 - Sem reclamacoes");
+    prinft("\n1 - Luz queimada");
+    prinft("\n2 - Luz piscando");
+    prinft("\n3 - Sem luz");
+    scanf("%d", &aux->option);
+    if(aux->option == 0){
+        aux->description = "Sem reclamacoes";
+    }else{
+        printf("\nDigite a sua reclamacao (maximo de 400 caracteres):  ");
+        fgets(aux->description, 400, stdin);
     }
+    aux->next = p->next;
+    p->next = aux;
+    aux->previous = p;
+    aux->next->previous = aux;
 }
 
 complaintForm *search(int number2, complaintForm *q)
@@ -91,9 +133,10 @@ void update(int number, complaintForm *p){
     scanf("%d", &q->option);
     if(q->option == 0){
         q->description = "Sem reclamacoes";
+    }else{
+        printf("\nDigite a sua reclamacao (maximo de 400 caracteres):  ");
+        fgets(q->description, 400, stdin);
     }
-    printf("\nDigite a sua reclamacao (maximo de 400 caracteres):  ");
-    fgets(q->description, 400, stdin);
 }
 void delete (int number, complaintForm *p){
     complaintForm *q;
