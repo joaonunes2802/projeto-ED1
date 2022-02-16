@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 typedef struct no{
-    int numberaux;         //number of light pole
+    int number;         //number of light pole
     int option;         //option of complaint
     struct no *next, *previous;
     char description[400]; //description of the complaint
