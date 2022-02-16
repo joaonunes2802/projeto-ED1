@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+//atualizando
 typedef struct no{
     int number;         //number of light pole
     int option;         //option of complaint
