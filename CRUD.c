@@ -8,7 +8,7 @@ typedef struct complaintForm{
     char name[50];        //name of who made the complaint
     char description[400]; //description of the complaint
 } complaintForm;
-int searchPoste(complaintForm *primeiro, int db, int auxPoste);
+int searchPoste(complaintForm *primeiro, int posteBuscado, int auxPoste);
 
 void inserirPoste(complaintForm **p, complaintForm **primeiro, complaintForm **auxLink, int inicio, int final, int auxPoste){
     int aux, aux2, m=inicio, k=final;
@@ -77,12 +77,12 @@ complaintForm *search(int numberPoste, complaintForm *primeiro){
     aux->previous = p;
     aux->next->previous = aux;
 }*/
-int searchPoste(complaintForm *primeiro, int db, int auxPoste) {
+int searchPoste(complaintForm *primeiro, int posteBuscado, int auxPoste) {
     int aux = 0, contador=0, w;
     complaintForm *temp;
     temp = primeiro;
     while ((temp != NULL) && (aux == 0)) {
-        if((temp)->numberPoste == db){
+        if((temp)->numberPoste == posteBuscado){
             aux=1;
         }
         else{
@@ -93,7 +93,7 @@ int searchPoste(complaintForm *primeiro, int db, int auxPoste) {
     contador++;
     if(aux==1){
         if (auxPoste == 1){
-            printf("O aluno foi achado, espaco indisponivel para insercao\n  Posicao na lista: %d\n  Matricula %d\n  Nome: %s\n", contador, db);
+            printf("O aluno foi achado, espaco indisponivel para insercao\n  Posicao na lista: %d\n  Matricula %d\n  Nome: %s\n", contador, posteBuscado);
         }
         w=1;
         return w;
