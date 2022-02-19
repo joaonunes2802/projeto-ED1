@@ -8,7 +8,7 @@ typedef struct complaintForm{
     char name[50];        //name of who made the complaint
     char description[400]; //description of the complaint
 } complaintForm;
-int searchPoste(complaintForm *primeiro, int posteBuscado, int auxPoste);
+int searchNumero(complaintForm *primeiro, int posteBuscado, int auxPoste);
 
 void inserirPoste(complaintForm **p, complaintForm **primeiro, complaintForm **auxLink, int inicio, int final, int auxPoste){
     int aux, aux2, m=inicio, k=final;
@@ -22,7 +22,7 @@ void inserirPoste(complaintForm **p, complaintForm **primeiro, complaintForm **a
                 scanf("%d", &(*p)->numberPoste);
             }
             if(*primeiro!=NULL){
-                aux2 = searchPoste(*primeiro, (*p)->numberPoste, auxPoste);
+                aux2 = searchNumero(*primeiro, (*p)->numberPoste, auxPoste);
                 if(aux2 != 1)
                     aux=1;
                 else
@@ -43,8 +43,7 @@ void inserirPoste(complaintForm **p, complaintForm **primeiro, complaintForm **a
         *auxLink=*p;
     }
 }
-
-complaintForm *search(int numberPoste, complaintForm *primeiro){
+complaintForm *search(complaintForm *primeiro, int numberPoste){
     complaintForm *temp=primeiro;
     while (temp->next != NULL){
         if (temp->numberPoste == numberPoste){
@@ -58,6 +57,7 @@ complaintForm *search(int numberPoste, complaintForm *primeiro){
         return temp;
     }
 }
+
 /*void inserction(complaintForm *p){
     complaintForm *aux;
     printf("\nCaso deje realizar alguma reclamacao, digite o numero correspondente:");
@@ -77,10 +77,9 @@ complaintForm *search(int numberPoste, complaintForm *primeiro){
     aux->previous = p;
     aux->next->previous = aux;
 }*/
-int searchPoste(complaintForm *primeiro, int posteBuscado, int auxPoste) {
+int searchNumero(complaintForm *primeiro, int posteBuscado, int auxPoste) {
     int aux = 0, contador=0, w;
-    complaintForm *temp;
-    temp = primeiro;
+    complaintForm *temp=primeiro;
     while ((temp != NULL) && (aux == 0)) {
         if((temp)->numberPoste == posteBuscado){
             aux=1;
@@ -109,15 +108,15 @@ int searchPoste(complaintForm *primeiro, int posteBuscado, int auxPoste) {
 
 void show(complaintForm *primeiro){
     complaintForm *r=primeiro;
-    while (r->next != NULL){
+    while (r != NULL){
         printf("\nNumero do poste: %d", r->numberPoste);
         printf("\nNome: %s", r->name);
         r = r->next;
     }
 }
-void update(int numberPoste, complaintForm *primeiro){
+void update(complaintForm *primeiro,int numberPoste){
     complaintForm *q;
-    q = search(numberPoste, primeiro);
+    q = search(primeiro, numberPoste);
     printf("\nDigite o seu nome:  ");
     fgets(q->name, 50, stdin);
     printf("\nCaso deje realizar alguma reclamacao, digite o numero correspondente:");
@@ -133,9 +132,9 @@ void update(int numberPoste, complaintForm *primeiro){
     }
 }
 
-void delete (int number, complaintForm *primeiro){
+void delete (complaintForm *primeiro, int numberPoste){
     complaintForm *q, *temp=NULL;
-    q = search(number, primeiro);
+    q = search(primeiro, numberPoste);
     if(q->next == NULL){    //deleting the last one
         free(q);
         q = NULL;
@@ -155,39 +154,40 @@ void delete (int number, complaintForm *primeiro){
 }
 
 int main() {
-    int nInserir, auxInserir=1, auxWhile=0, db, auxPoste, numberPoste;
-    complaintForm *p=NULL, *auxLink=NULL, *primeiro=NULL;
-    while(auxWhile != 9){
-        printf(" Digite 1 se deseja inserir alunos:\n Digite 2 se deseja exebir a lista: \n Digite 3 se deseja buscar um aluno pela matricula/ posicao;\n Digite 9 se deseja terminar o programa: \n");
+    int nInserir, auxInserir = 1, auxWhile = 0, auxPoste, numberPoste;
+    complaintForm *p = NULL, *auxLink = NULL, *primeiro = NULL;
+    while (auxWhile != 9) {
+        printf(" Digite 1 se deseja inserir alunos:\n Digite 2 se deseja exebir a lista: \n Digite 3 se deseja buscar o poste pelo number id do mesmo;\n Digite 4 se deseja buscar um poste pela posicao na lista\n Digite 5 se deseja atualizar a lista\n Digite 6 se deseja remover\n Digite 9 se deseja terminar o programa: \n");
         scanf("%d", &auxWhile);
-        if (auxWhile == 1){
+        if (auxWhile == 1) {
             printf("Quantos alunos deseja inserir?\n");
             scanf("%d", &nInserir);
-            if(nInserir<9999&&(auxInserir < 9999)){
-                nInserir= auxInserir + nInserir;
-                inserirPoste(&p, &auxLink, &primeiro, auxInserir, nInserir, auxPoste);
+            if (nInserir < 9999 && (auxInserir < 9999)) {
+                auxPoste = 0;
+                nInserir = auxInserir + nInserir;
+                inserirPoste(&p, &primeiro, &auxLink, auxInserir, nInserir, auxPoste);
                 auxInserir = nInserir;
-            }
-            else
+            } else
                 printf("A lista nao comporta essa alocacao, ou por estar cheia, ou a quantidade de elementos a ser inserido era muito grande.\nLista limitada a 9.999 insercoes.\n");
-        }
-        else if(auxWhile == 2){
+        } else if (auxWhile == 2) {
             show(primeiro);
-        }
-        else if(auxWhile == 3){
+        } else if (auxWhile == 3) {
+            auxPoste = 1;
             printf("Digite numero do poste que deseja buscar");
             scanf("%d", &numberPoste);
-            search(numberPoste, primeiro);
-        }
-        else if(auxWhile == 4){
+            searchNumero(primeiro, numberPoste, auxPoste);
+        } else if (auxWhile == 4) {
+            printf("Digite a posicao do poste que deseja buscar");
+            scanf("%d", &numberPoste);
+            search(primeiro, numberPoste);
+        } else if (auxWhile == 5) {
             printf("Digite numero do poste que deseja buscar a fim de atualizar o mesmo na lista");
             scanf("%d", &numberPoste);
-            update(numberPoste, primeiro);
-        }
-        else if(auxWhile == 5){
+            update(primeiro, numberPoste);
+        } else if (auxWhile == 6) {
             printf("Digite numero do poste que deseja buscar a fim de deletar da lista");
             scanf("%d", &numberPoste);
-            delete(numberPoste, primeiro);
+            delete(primeiro, numberPoste);
         }
     }
     return 0;
