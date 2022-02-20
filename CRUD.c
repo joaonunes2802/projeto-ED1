@@ -1,12 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef struct complaintForm{
-    int numberPoste;         //number of light pole
-    int option;         //option of complaint
+    int numberPoste;             //number of light pole
+    int option;                 //option of complaint
     struct complaintForm *next;
-    char name[50];        //name of who made the complaint
-    char description[400]; //description of the complaint
+    char description[400];     //description of the complaint
+    char name[];              // name of who made the complaint
 } complaintForm;
 int searchPoste(complaintForm *primeiro, int posteBuscado, int auxPoste);
 
@@ -44,18 +45,17 @@ void inserirPoste(complaintForm **p, complaintForm **primeiro, complaintForm **a
     }
 }
 
-complaintForm *search(int numberPoste, complaintForm *primeiro){
-    complaintForm *temp=primeiro;
+complaintForm *search(int numeroBuscado, complaintForm *primeiro){
+    complaintForm *temp = primeiro;
     while (temp->next != NULL){
-        if (temp->numberPoste == numberPoste){
+        if (temp->numberPoste == numeroBuscado){
             return temp;
-        }
-        else
+        }else{
             temp = temp->next;
+        }
     }
-    if((temp->next==NULL)&&(temp->numberPoste != numberPoste)){
-        temp=NULL;
-        return temp;
+    if((temp->next==NULL)&&(temp->numberPoste != numeroBuscado)){
+        printf("\nErro, poste nao econtrado, pois nao esta na lista!\n");
     }
 }
 /*void inserction(complaintForm *p){
@@ -108,49 +108,60 @@ int searchPoste(complaintForm *primeiro, int posteBuscado, int auxPoste) {
 }
 
 void show(complaintForm *primeiro){
-    complaintForm *r=primeiro;
-    while (r->next != NULL){
-        printf("\nNumero do poste: %d", r->numberPoste);
-        printf("\nNome: %s", r->name);
-        r = r->next;
+    complaintForm *p=primeiro;
+    while (p->next != NULL){
+        printf("\nNumero do poste: %d", p->numberPoste);
+        printf("\nNumero da reclamacao: %d", p->option);
+        printf("\nNome de quem fez a reclamacao: %s", p->name);
+        printf("\nDescricao do problema: ");
+        printf("\n%s", p->description);
+        p = p->next;
     }
 }
 void update(int numberPoste, complaintForm *primeiro){
-    complaintForm *q;
-    q = search(numberPoste, primeiro);
+    complaintForm *p;
+    p = search(numberPoste, primeiro);
     printf("\nDigite o seu nome:  ");
-    fgets(q->name, 50, stdin);
+    gets(p->name);
     printf("\nCaso deje realizar alguma reclamacao, digite o numero correspondente:");
     printf("\n0 - Problema resolvido");
     printf("\n1 - Luz queimada");
     printf("\n2 - Luz piscando");
     printf("\n3 - Sem luz");
-    scanf("%d", &q->option);
-    if(q->option != 0){
+    scanf("%d", &p->option);
+    if(p->option != 0){
         printf("\nDigite a sua reclamacao (maximo de 400 caracteres):  ");
         fflush(stdin);
-        fgets(q->description, 400, stdin);
+        fgets(p->description, 400, stdin);
+    }else{
+        strcpy(p->description, "Sem reclamacoes");
     }
 }
 
-void delete (int number, complaintForm *primeiro){
-    complaintForm *q, *temp=NULL;
-    q = search(number, primeiro);
-    if(q->next == NULL){    //deleting the last one
-        free(q);
-        q = NULL;
-    }else if(q == primeiro){   //deleting the first one
-        q->next = NULL;
-        free(q);
-        q = NULL;
+void *delete (int number, complaintForm *primeiro){
+    complaintForm *p, *q, *r;
+    p = search(number, primeiro);
+    if(p->next == NULL){    //deleting the last one
+        free(p);
+        p = NULL;
+        return primeiro;
+    }else if(p == primeiro){   //deleting the first one
+        q = p->next;
+        free(p);
+        p = q;
+        primeiro = p;
+        return primeiro;
     }
     else{
-        while(q->next!=NULL){
-            temp=q;
-            q=q->next;
-            q->next=temp;
+        q = primeiro;
+        while(q->next->numberPoste != p->numberPoste){
+            q = q->next;
         }
-        free(temp);
+        r = p->next;
+        free(p);
+        p = NULL;
+        q->next = r;
+        return primeiro;
     }
 }
 
