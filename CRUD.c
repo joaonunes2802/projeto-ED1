@@ -69,6 +69,7 @@ complaintForm *search(int numeroBuscado, complaintForm *primeiro)
     if ((temp->next == NULL) && (temp->numberPoste != numeroBuscado))
     {
         printf("\nErro, poste nao econtrado, pois nao esta na lista!\n");
+        return NULL;
     }
 }
 /*void inserction(complaintForm *p){
@@ -131,7 +132,7 @@ int searchPoste(complaintForm *primeiro, int posteBuscado, int auxPoste)
 void show(complaintForm *primeiro)
 {
     complaintForm *p = primeiro;
-    while (p->next != NULL)
+    while (p != NULL)
     {
         printf("\nNumero do poste: %d", p->numberPoste);
         printf("\nNumero da reclamacao: %d", p->option);
