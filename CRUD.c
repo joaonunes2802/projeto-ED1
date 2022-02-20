@@ -2,8 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct complaintForm
-{
+typedef struct complaintForm{
     int numberPoste; // number of light pole
     int option;      // option of complaint
     struct complaintForm *next;
@@ -12,8 +11,7 @@ typedef struct complaintForm
 } complaintForm;
 int searchPoste(complaintForm *primeiro, int posteBuscado, int auxPoste);
 
-void inserirPoste(complaintForm **p, complaintForm **primeiro, complaintForm **auxLink, int inicio, int final, int auxPoste)
-{
+void inserirPoste(complaintForm **p, complaintForm **primeiro, complaintForm **auxLink, int inicio, int final, int auxPoste){
     int aux, aux2, m = inicio, k = final;
     for (m; m < k; m++)
     {
