@@ -74,6 +74,7 @@ formularioReclamacao *busca(int numeroBuscado, formularioReclamacao *primeiro)
 }
 void insercao(formularioReclamacao *primeiro){
     formularioReclamacao *p, *aux;
+    p = (formularioReclamacao *) malloc(sizeof(formularioReclamacao));
     printf("\nDigite seu nome: ");
     gets(p->nome);
     printf("\nCaso deje realizar alguma reclamacao, digite o numero correspondente:");
