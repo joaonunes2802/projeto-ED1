@@ -23,7 +23,7 @@ int main() {
         printf(" Digite 1 se deseja inserir postes:\n Digite 2 se deseja exebir a lista: \n Digite 3 se deseja buscar um poste pela posicao na lista:\n Digite 4 para atualizar um cadastro do poste:\n Digite 5 para deletar um poste:\n Digite 9 se deseja terminar o programa: \n");
         scanf("%d", &auxWhile);
         if (auxWhile == 1){
-            printf("Quantos alunos deseja inserir?\n");
+            printf("Quantos postes deseja inserir?\n");
             scanf("%d", &nInserir);
             if (nInserir < 9999 && (auxInserir < 9999)){
                 nInserir = auxInserir + nInserir;
@@ -56,27 +56,12 @@ int main() {
 }
 
 void inserirPoste(formularioReclamacao **p, formularioReclamacao **primeiro, formularioReclamacao **auxLink, int inicio, int final) {
-    int aux, aux2, m = inicio, k = final;
+    int m = inicio, k = final;
     formularioReclamacao *temp;
     for (m; m < k; m++) {
         *p = (formularioReclamacao *) malloc(sizeof(formularioReclamacao));
-        printf("Digite o numero do poste a ser inserido no formulario Reclamacao, sistema entre 1 e 9999: se ja houver um poste com esse numero, digite novamente:\n");
-        (*p)->numeroPoste = -1;
-        aux2=1;
-        aux=0;
-        scanf("%d", &(*p)->numeroPoste);
-        /*while (aux == 0) {
-            scanf("%d", &(*p)->numeroPoste);
-            if (*primeiro != NULL) {
-                temp = *primeiro;
-                while (temp->proximo != *p) {
-                    if (temp->numeroPoste == ((*p)->numeroPoste)) aux2 =0;
-                    temp = temp->proximo;
-                }
-                if((temp->proximo==NULL)&&(aux2==0)) aux=1;
-            }
-            else aux=1;
-        }*/
+        (*p)->numeroPoste=m;
+        printf("Poste numero: %d\n", (*p)->numeroPoste);
         fflush(stdin);
         printf("Escreva o nome de quem esta realizando a reclamacao:\n");
         fgets((*p)->nome, 30, stdin);
