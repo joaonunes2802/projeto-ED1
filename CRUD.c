@@ -57,7 +57,6 @@ int main() {
 
 void inserirPoste(formularioReclamacao **p, formularioReclamacao **primeiro, formularioReclamacao **auxLink, int inicio, int final) {
     int m = inicio, k = final;
-    formularioReclamacao *temp;
     for (m; m < k; m++) {
         *p = (formularioReclamacao *) malloc(sizeof(formularioReclamacao));
         (*p)->numeroPoste=m;
@@ -69,7 +68,7 @@ void inserirPoste(formularioReclamacao **p, formularioReclamacao **primeiro, for
         printf("\n0 - Sem reclamacoes");
         printf("\n1 - Luz queimada");
         printf("\n2 - Luz piscando");
-        printf("\n3 - Sem luz");
+        printf("\n3 - Sem luz\n");
         scanf("%d", &(*p)->opcao);
         if ((*p)->opcao == 0) strcpy((*p)->descricao, "Sem reclamacoes");
         else {
@@ -85,8 +84,11 @@ void inserirPoste(formularioReclamacao **p, formularioReclamacao **primeiro, for
 
 formularioReclamacao *busca(int numeroBuscado, formularioReclamacao *primeiro){
     formularioReclamacao *temp = primeiro;
-    while (temp->proximo != NULL){
-        if (temp->numeroPoste == numeroBuscado) return temp;
+    while (temp != NULL){
+        if (temp->numeroPoste == numeroBuscado){
+            printf("\n Poste encontrado\n Nome de quem fez o cadastro: %s\n Opcao de reclamacao: %d\n Descricao do problema: %s\n\n", temp->nome, temp->opcao, temp->descricao);
+            return temp;
+        }
         else temp = temp->proximo;
     }
     if ((temp->proximo == NULL) && (temp->numeroPoste != numeroBuscado)){
@@ -99,10 +101,10 @@ void exibe(formularioReclamacao *primeiro){
     formularioReclamacao *p = primeiro;
     while (p != NULL){
         printf("\nNumero do poste: %d", p->numeroPoste);
-        printf("\nNumero da reclamacao: %d", p->opcao);
         printf("\nNome de quem fez a reclamacao: %s", p->nome);
-        printf("\nDescricao do problema: ");
-        printf("\n%s", p->descricao);
+        printf("\nNumero da reclamacao: %d", p->opcao);
+        printf("\nDescricao do problema:\n ");
+        printf("%s\n", p->descricao);
         p = p->proximo;
     }
 }
@@ -110,8 +112,9 @@ void exibe(formularioReclamacao *primeiro){
 void atualiza(int numeroPoste, formularioReclamacao *primeiro){
     formularioReclamacao *p;
     p = busca(numeroPoste, primeiro);
-    printf("\nDigite o seu nome:  ");
-    gets(p->nome);
+    fflush(stdin);
+    printf("Escreva o nome de quem esta atualizando o cadastro:\n");
+    fgets(p->nome, 30, stdin);
     printf("\nCaso deje realizar alguma reclamacao, digite o numero correspondente:");
     printf("\n0 - Problema resolvido");
     printf("\n1 - Luz queimada");
