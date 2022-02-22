@@ -3,11 +3,11 @@
 #include <string.h>
 
 typedef struct formularioReclamacao{
-    int numeroPoste; // number of light pole
-    int opcao;      // opcao of complaint
+    int numeroPoste; // numero do poste der luz
+    int opcao;      // opção de reclamação
     struct formularioReclamacao *proximo;
-    char descricao[400]; // descricao of the complaint
-    char nome[];           // nome of who made the complaint
+    char descricao[400], cpf[11], endereco[30], telefone[11]; // descrição da reclamação, cpf de quem fez a reclamação, endereço e telefone de quem fez a reclamação
+    char nome[];           // nome de quem fez a reclamação 
 } formularioReclamacao;
 
 void inserirPoste(formularioReclamacao **p, formularioReclamacao **primeiro, formularioReclamacao **auxLink, int inicio, int final);
@@ -15,6 +15,7 @@ formularioReclamacao *busca(int numeroBuscado, formularioReclamacao *primeiro);
 void exibe(formularioReclamacao *primeiro);
 void atualiza(int numeroPoste, formularioReclamacao *primeiro);
 formularioReclamacao *delete (int number, formularioReclamacao *primeiro);
+//int rotasegura(formularioreclamacao *primeiro);
 
 int main() {
     int nInserir, auxInserir = 1, auxWhile = 0, numeroPoste;
