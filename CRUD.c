@@ -49,7 +49,7 @@ int main() {
         else if (auxWhile == 5){
             printf("Digite numero do poste que deseja buscar a fim de deletar da lista");
             scanf("%d", &numeroPoste);
-            delete (numeroPoste, primeiro);
+            primeiro = delete (numeroPoste, primeiro);
         }
     }
     return 0;
@@ -130,7 +130,7 @@ void atualiza(int numeroPoste, formularioReclamacao *primeiro){
     else strcpy(p->descricao, "Sem reclamacoes");
 }
 
-formularioReclamacao *delete (int number, formularioReclamacao *primeiro){
+formularioReclamacao *delete(int number, formularioReclamacao *primeiro){
     formularioReclamacao *p, *q, *r;
     p = busca(number, primeiro);
     if (p->proximo == NULL) { // deleting the last one
