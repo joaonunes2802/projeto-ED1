@@ -73,6 +73,7 @@ void inserirPoste(formularioReclamacao **p, formularioReclamacao **primeiro, for
         if ((*p)->opcao == 0) strcpy((*p)->descricao, "Sem reclamacoes");
         else {
             printf("\nDigite a sua reclamacao (maximo de 400 caracteres):  ");
+            fflush(stdin);
             fgets((*p)->descricao, 400, stdin);
         }
         (*p)->proximo = NULL;
