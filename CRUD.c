@@ -85,20 +85,16 @@ void inserirPoste(formularioReclamacao **p, formularioReclamacao **primeiro, for
 }
 
 formularioReclamacao *busca(int numeroBuscado, formularioReclamacao *primeiro){
-    formularioReclamacao *temp = primeiro, *aux=NULL;
-    int encontrado = 0;
-    while (temp!= NULL && encontrado == 0){
+    formularioReclamacao *temp = primeiro;
+    while (temp!= NULL){
         if (temp->numeroPoste == numeroBuscado){
             printf("\n Poste encontrado\n Nome de quem fez o cadastro: %s Opcao de reclamacao: %d\n Descricao do problema: %s\n\n", temp->nome, temp->opcao, temp->descricao);
-            encontrado = 1;
             return temp;
         }
         temp = temp->proximo;
     }
-    if (encontrado == 0){
-        printf("\nErro, poste nao econtrado, pois nao esta na lista!\n");
-        //return aux;
-    }
+    printf("\nErro, poste nao econtrado, pois nao esta na lista!\n");
+    return NULL;
 }
 
 void exibe(formularioReclamacao *primeiro){
@@ -113,24 +109,25 @@ void exibe(formularioReclamacao *primeiro){
     }
 }
 
-void atualiza(int numeroPoste, formularioReclamacao *primeiro){
+void atualiza(int numeroPoste, formularioReclamacao *primeiro) {
     formularioReclamacao *p;
     p = busca(numeroPoste, primeiro);
     fflush(stdin);
-    printf("Escreva o nome de quem esta atualizando o cadastro:\n");
-    fgets(p->nome, 30, stdin);
-    printf("\nCaso deje realizar alguma reclamacao, digite o numero correspondente:");
-    printf("\n0 - Problema resolvido");
-    printf("\n1 - Luz queimada");
-    printf("\n2 - Luz piscando");
-    printf("\n3 - Sem luz");
-    scanf("%d", &p->opcao);
-    if (p->opcao != 0){
-        printf("\nDigite a sua reclamacao (maximo de 400 caracteres):  ");
-        fflush(stdin);
-        fgets(p->descricao, 400, stdin);
+    if (p != NULL) {
+        printf("Escreva o nome de quem esta atualizando o cadastro:\n");
+        fgets(p->nome, 30, stdin);
+        printf("\nCaso deje realizar alguma reclamacao, digite o numero correspondente:");
+        printf("\n0 - Problema resolvido");
+        printf("\n1 - Luz queimada");
+        printf("\n2 - Luz piscando");
+        printf("\n3 - Sem luz");
+        scanf("%d", &p->opcao);
+        if (p->opcao != 0) {
+            printf("\nDigite a sua reclamacao (maximo de 400 caracteres):  ");
+            fflush(stdin);
+            fgets(p->descricao, 400, stdin);
+        } else strcpy(p->descricao, "Sem reclamacoes");
     }
-    else strcpy(p->descricao, "Sem reclamacoes");
 }
 
 formularioReclamacao *delete(int number, formularioReclamacao *primeiro){
@@ -143,6 +140,8 @@ formularioReclamacao *delete(int number, formularioReclamacao *primeiro){
         primeiro = p;
         return primeiro;
     }
+    else if(p==NULL)
+        return p;
     else{
         q = primeiro;
         while (q->proximo->numeroPoste != p->numeroPoste) q = q->proximo;
