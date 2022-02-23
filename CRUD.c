@@ -86,18 +86,18 @@ void inserirPoste(formularioReclamacao **p, formularioReclamacao **primeiro, for
 
 formularioReclamacao *busca(int numeroBuscado, formularioReclamacao *primeiro){
     formularioReclamacao *temp = primeiro, *aux=NULL;
-    int auxSaida=0;
-    while ((temp->proximo != NULL)&&(auxSaida==0)){
+    int encontrado = 0;
+    while (temp!= NULL && encontrado == 0){
         if (temp->numeroPoste == numeroBuscado){
-            printf("\n Poste encontrado\n Nome de quem fez o cadastro: %s\n Opcao de reclamacao: %d\n Descricao do problema: %s\n\n", temp->nome, temp->opcao, temp->descricao);
+            printf("\n Poste encontrado\n Nome de quem fez o cadastro: %s Opcao de reclamacao: %d\n Descricao do problema: %s\n\n", temp->nome, temp->opcao, temp->descricao);
+            encontrado = 1;
             return temp;
         }
-        else if(temp->proximo!=NULL) temp = temp->proximo;
-        else auxSaida=1;
+        temp = temp->proximo;
     }
-    if (temp->numeroPoste != numeroBuscado){
+    if (encontrado == 0){
         printf("\nErro, poste nao econtrado, pois nao esta na lista!\n");
-        return aux;
+        //return aux;
     }
 }
 
@@ -106,7 +106,7 @@ void exibe(formularioReclamacao *primeiro){
     while (p != NULL){
         printf("\nNumero do poste: %d", p->numeroPoste);
         printf("\nNome de quem fez a reclamacao: %s", p->nome);
-        printf("\nNumero da reclamacao: %d", p->opcao);
+        printf("Numero da reclamacao: %d", p->opcao);
         printf("\nDescricao do problema:\n ");
         printf("%s\n", p->descricao);
         p = p->proximo;
@@ -136,12 +136,7 @@ void atualiza(int numeroPoste, formularioReclamacao *primeiro){
 formularioReclamacao *delete(int number, formularioReclamacao *primeiro){
     formularioReclamacao *p, *q, *r;
     p = busca(number, primeiro);
-    if (p->proximo == NULL) { // deleting the last one
-        free(p);
-        p = NULL;
-        return primeiro;
-    }
-    else if (p == primeiro) { // deleting the first one
+    if (p == primeiro) { // deleting the first one
         q = p->proximo;
         free(p);
         p = q;
