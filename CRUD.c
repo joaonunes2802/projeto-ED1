@@ -7,7 +7,7 @@ typedef struct formularioReclamacao{
     int opcao;      // opção de reclamação
     struct formularioReclamacao *proximo;
     char descricao[400], cpf[11], endereco[30], telefone[11]; // descrição da reclamação, cpf de quem fez a reclamação, endereço e telefone de quem fez a reclamação
-    char nome[30];           // nome de quem fez a reclamação 
+    char nome[30];           // nome de quem fez a reclamação
 } formularioReclamacao;
 
 void inserirPoste(formularioReclamacao **p, formularioReclamacao **primeiro, formularioReclamacao **auxLink, int inicio, int final);
@@ -85,17 +85,19 @@ void inserirPoste(formularioReclamacao **p, formularioReclamacao **primeiro, for
 }
 
 formularioReclamacao *busca(int numeroBuscado, formularioReclamacao *primeiro){
-    formularioReclamacao *temp = primeiro;
-    while (temp != NULL){
+    formularioReclamacao *temp = primeiro, *aux=NULL;
+    int auxSaida=0;
+    while ((temp->proximo != NULL)&&(auxSaida==0)){
         if (temp->numeroPoste == numeroBuscado){
             printf("\n Poste encontrado\n Nome de quem fez o cadastro: %s\n Opcao de reclamacao: %d\n Descricao do problema: %s\n\n", temp->nome, temp->opcao, temp->descricao);
             return temp;
         }
-        else temp = temp->proximo;
+        else if(temp->proximo!=NULL) temp = temp->proximo;
+        else auxSaida=1;
     }
-    if ((temp->proximo == NULL) && (temp->numeroPoste != numeroBuscado)){
+    if (temp->numeroPoste != numeroBuscado){
         printf("\nErro, poste nao econtrado, pois nao esta na lista!\n");
-        return NULL;
+        return aux;
     }
 }
 
