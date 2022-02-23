@@ -7,7 +7,7 @@ typedef struct formularioReclamacao{
     int opcao;      // opção de reclamação
     struct formularioReclamacao *proximo;
     char descricao[400], cpf[11], endereco[30], telefone[11]; // descrição da reclamação, cpf de quem fez a reclamação, endereço e telefone de quem fez a reclamação
-    char nome[];           // nome de quem fez a reclamação 
+    char nome[30];           // nome de quem fez a reclamação 
 } formularioReclamacao;
 
 void inserirPoste(formularioReclamacao **p, formularioReclamacao **primeiro, formularioReclamacao **auxLink, int inicio, int final);
