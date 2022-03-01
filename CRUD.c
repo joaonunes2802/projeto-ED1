@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 typedef struct formularioReclamacao{
     int numeroPoste; // numero do poste der luz
@@ -20,6 +21,21 @@ formularioReclamacao *delete (int number, formularioReclamacao *primeiro);
 int main() {
     int qtdPostes, auxInserir = 1, auxWhile = 0, numeroPoste;
     formularioReclamacao *p = NULL, *auxLink = NULL, *primeiro = NULL;
+    struct tm *data_hora;             // struct que armazena data e hora
+    time_t segundos;                        // variável para aemazenar o tempo em segundos
+    time(segundos);                         // obtendo o tempo em segundos
+    data_hora = localtime(&segundos); // convertendo o tempo em segundos para o tempo local
+    FILE *log;
+    log = fopen("c:\\log.txt", "w+");
+    if(log == NULL){
+        printf("\nErro, arquivo de log nao pode ser aberto!");
+        exit(1);
+    }else{
+        fflush(stdin);
+        fputs("\nAbertura do programa!!\n", log);
+        fprintf(log, "Programa iniciado as %d:%d:%d de %d/%d/%d\n", data_hora->tm_hour, data_hora->tm_min, data_hora->tm_sec, data_hora->tm_mday, data_hora->tm_mon+1, data_hora->tm_year+1900);
+        fclose(log);
+    }
     while (auxWhile != 9){
         printf(" Digite 1 se deseja inserir postes:\n Digite 2 se deseja exebir a lista: \n Digite 3 se deseja buscar um poste pela posicao na lista:\n Digite 4 para atualizar um cadastro do poste:\n Digite 5 para deletar um poste:\n Digite 9 se deseja terminar o programa: \n");
         scanf("%d", &auxWhile);
