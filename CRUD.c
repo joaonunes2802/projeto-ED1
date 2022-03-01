@@ -18,18 +18,18 @@ formularioReclamacao *delete (int number, formularioReclamacao *primeiro);
 //int rotasegura(formularioreclamacao *primeiro);
 
 int main() {
-    int nInserir, auxInserir = 1, auxWhile = 0, numeroPoste;
+    int qtdPostes, auxInserir = 1, auxWhile = 0, numeroPoste;
     formularioReclamacao *p = NULL, *auxLink = NULL, *primeiro = NULL;
     while (auxWhile != 9){
         printf(" Digite 1 se deseja inserir postes:\n Digite 2 se deseja exebir a lista: \n Digite 3 se deseja buscar um poste pela posicao na lista:\n Digite 4 para atualizar um cadastro do poste:\n Digite 5 para deletar um poste:\n Digite 9 se deseja terminar o programa: \n");
         scanf("%d", &auxWhile);
         if (auxWhile == 1){
             printf("Quantos postes deseja inserir?\n");
-            scanf("%d", &nInserir);
-            if (nInserir < 9999 && (auxInserir < 9999)){
-                nInserir = auxInserir + nInserir;
-                inserirPoste(&p, &primeiro, &auxLink, auxInserir, nInserir);
-                auxInserir = nInserir;
+            scanf("%d", &qtdPostes);
+            if (qtdPostes < 9999 && (auxInserir < 9999)){
+                qtdPostes = auxInserir + qtdPostes;
+                inserirPoste(&p, &primeiro, &auxLink, auxInserir, qtdPostes);
+                auxInserir = qtdPostes;
             }
             else
                 printf("A lista nao comporta essa alocacao, ou por estar cheia, ou a quantidade de elementos a ser inserido era muito grande.\nLista limitada a 9.999 insercoes.\n");
@@ -85,16 +85,20 @@ void inserirPoste(formularioReclamacao **p, formularioReclamacao **primeiro, for
 }
 
 formularioReclamacao *busca(int numeroBuscado, formularioReclamacao *primeiro){
-    formularioReclamacao *temp = primeiro;
-    while (temp!= NULL){
+    formularioReclamacao *temp = primeiro, *aux=NULL;
+    int encontrado = 0;
+    while (temp!= NULL && encontrado == 0){
         if (temp->numeroPoste == numeroBuscado){
             printf("\n Poste encontrado\n Nome de quem fez o cadastro: %s Opcao de reclamacao: %d\n Descricao do problema: %s\n\n", temp->nome, temp->opcao, temp->descricao);
+            encontrado = 1;
             return temp;
         }
         temp = temp->proximo;
     }
-    printf("\nErro, poste nao econtrado, pois nao esta na lista!\n");
-    return NULL;
+    if (encontrado == 0){
+        printf("\nErro, poste nao econtrado, pois nao esta na lista!\n");
+        //return aux;
+    }
 }
 
 void exibe(formularioReclamacao *primeiro){
@@ -109,25 +113,24 @@ void exibe(formularioReclamacao *primeiro){
     }
 }
 
-void atualiza(int numeroPoste, formularioReclamacao *primeiro) {
+void atualiza(int numeroPoste, formularioReclamacao *primeiro){
     formularioReclamacao *p;
     p = busca(numeroPoste, primeiro);
     fflush(stdin);
-    if (p != NULL) {
-        printf("Escreva o nome de quem esta atualizando o cadastro:\n");
-        fgets(p->nome, 30, stdin);
-        printf("\nCaso deje realizar alguma reclamacao, digite o numero correspondente:");
-        printf("\n0 - Problema resolvido");
-        printf("\n1 - Luz queimada");
-        printf("\n2 - Luz piscando");
-        printf("\n3 - Sem luz");
-        scanf("%d", &p->opcao);
-        if (p->opcao != 0) {
-            printf("\nDigite a sua reclamacao (maximo de 400 caracteres):  ");
-            fflush(stdin);
-            fgets(p->descricao, 400, stdin);
-        } else strcpy(p->descricao, "Sem reclamacoes");
+    printf("Escreva o nome de quem esta atualizando o cadastro:\n");
+    fgets(p->nome, 30, stdin);
+    printf("\nCaso deje realizar alguma reclamacao, digite o numero correspondente:");
+    printf("\n0 - Problema resolvido");
+    printf("\n1 - Luz queimada");
+    printf("\n2 - Luz piscando");
+    printf("\n3 - Sem luz");
+    scanf("%d", &p->opcao);
+    if (p->opcao != 0){
+        printf("\nDigite a sua reclamacao (maximo de 400 caracteres):  ");
+        fflush(stdin);
+        fgets(p->descricao, 400, stdin);
     }
+    else strcpy(p->descricao, "Sem reclamacoes");
 }
 
 formularioReclamacao *delete(int number, formularioReclamacao *primeiro){
@@ -140,8 +143,6 @@ formularioReclamacao *delete(int number, formularioReclamacao *primeiro){
         primeiro = p;
         return primeiro;
     }
-    else if(p==NULL)
-        return p;
     else{
         q = primeiro;
         while (q->proximo->numeroPoste != p->numeroPoste) q = q->proximo;
