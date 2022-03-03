@@ -21,24 +21,24 @@ void delete (int number, formularioReclamacao **primeiro, formularioReclamacao *
 int main() {
     int qtdPostes, auxInserir = 1, auxWhile = 0, numeroPoste;
     formularioReclamacao *primeiro = NULL, *final, *tempBusca=NULL;
-    /*struct tm *data_hora;             // struct que armazena data e hora
+    struct tm *data_hora;             // struct que armazena data e hora
     time_t segundos;                        // variável para aemazenar o tempo em segundos
     time(segundos);                         // obtendo o tempo em segundos
     data_hora = localtime(&segundos); // convertendo o tempo em segundos para o tempo local
     FILE *log;
-    log = fopen("c:\\log.txt", "w+");
+    log = fopen("log.txt", "w+");
     if(log == NULL){
         printf("\nErro, arquivo de log nao pode ser aberto!");
-        exit(1);
+        exit(0);
     }else{
         fflush(stdin);
-        fputs("\nAbertura do programa!!\n", log);
-        fprintf(log, "Programa iniciado as %d:%d:%d de %d/%d/%d\n", data_hora->tm_hour, data_hora->tm_min, data_hora->tm_sec, data_hora->tm_mday, data_hora->tm_mon+1, data_hora->tm_year+1900);
+        fputs("Abertura do programa!!", log);
+        fprintf(log, "\nPrograma iniciado as %d:%d:%d de %d/%d/%d", data_hora->tm_hour, data_hora->tm_min, data_hora->tm_sec, data_hora->tm_mday, data_hora->tm_mon+1, data_hora->tm_year+1900);
         fclose(log);
     }
-     */
+
     while (auxWhile != 9){
-        printf(" Digite 1 se deseja inserir postes:\n Digite 2 se deseja exebir a lista: \n Digite 3 se deseja buscar um poste pela posicao na lista:\n Digite 4 para atualizar um cadastro do poste:\n Digite 5 para deletar um poste:\n Digite 9 se deseja terminar o programa: \n");
+        printf("\n Digite 1 se deseja inserir postes:\n Digite 2 se deseja exebir a lista: \n Digite 3 se deseja buscar um poste pela posicao na lista:\n Digite 4 para atualizar um cadastro do poste:\n Digite 5 para deletar um poste:\n Digite 6 se deseja exibir o historico de operacoes realizadas:\n Digite 9 se deseja terminar o programa: \n");
         scanf("%d", &auxWhile);
         if (auxWhile == 1){
             printf("Quantos postes deseja inserir?\n");
@@ -47,6 +47,14 @@ int main() {
                 qtdPostes = auxInserir + qtdPostes;
                 inserirPoste( &primeiro, &final, auxInserir, qtdPostes);
                 auxInserir = qtdPostes;
+                fflush(stdin);
+                log = fopen("log.txt", "a");
+                if(log == NULL){
+                    printf("\nErro, arquivo de log nao pode ser aberto!");
+                    exit(0);
+                }
+                fprintf(log, "\nIsercao de novos postes as %d:%d:%d de %d/%d/%d", data_hora->tm_hour, data_hora->tm_min, data_hora->tm_sec, data_hora->tm_mday, data_hora->tm_mon+1, data_hora->tm_year+1900);
+                fclose(log);
             }
             else
                 printf("A lista nao comporta essa alocacao, ou por estar cheia, ou a quantidade de elementos a ser inserido era muito grande.\nLista limitada a 9.999 insercoes.\n");
@@ -64,14 +72,39 @@ int main() {
             else     printf("\nErro, poste nao econtrado, pois nao esta na lista!\n");
         }
         else if (auxWhile == 4){
-            printf("Digite numero do poste que deseja buscar a fim de atualizar o mesmo na lista\n");
+            printf("Digite numero do poste que deseja atualizar na lista\n");
             scanf("%d", &numeroPoste);
             atualiza(numeroPoste, primeiro);
+            log = fopen("log.txt", "a");
+            if(log == NULL){
+                printf("\nErro, nao foi possivel abrir o arquivo de log!\n");
+                exit(0);
+            }
+            fprintf(log, "\nAtualizacao da lista de postes as %d:%d:%d de %d/%d/%d", data_hora->tm_hour, data_hora->tm_min, data_hora->tm_sec, data_hora->tm_mday, data_hora->tm_mon+1, data_hora->tm_year+1900);
+            fclose(log);
         }
         else if (auxWhile == 5){
-            printf("Digite numero do poste que deseja buscar a fim de deletar da lista\n");
+            printf("Digite numero do poste que deseja deletar da lista\n");
             scanf("%d", &numeroPoste);
             delete (numeroPoste, &primeiro, &final);
+            log = fopen("log.txt", "a");
+            if (log == NULL){
+                printf("\nErro, nao foi possivel abrir o arquivo de log!\n");
+                exit(0);
+            }
+            fprintf(log, "\nAcionamento da operacao de delete de um poste da lista as %d:%d:%d de %d/%d/%d", data_hora->tm_hour, data_hora->tm_min, data_hora->tm_sec, data_hora->tm_mday, data_hora->tm_mon+1, data_hora->tm_year+1900);
+            fclose(log);
+        }
+        else if (auxWhile == 6){
+            log = fopen("log.txt", "r");
+            if (log == NULL){
+                printf("\nErro, nao foi possivel abrir o arquivo de log!\n");
+                exit(0);
+            }
+            char exibe[100];
+            while(fgets(exibe, 100, log) != NULL){
+                printf("%s", exibe);
+            }
         }
     }
     return 0;
