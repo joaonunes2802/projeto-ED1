@@ -20,7 +20,7 @@ void delete (int number, formularioReclamacao **primeiro, formularioReclamacao *
 
 int main() {
     int qtdPostes, auxInserir = 1, auxWhile = 0, numeroPoste;
-    formularioReclamacao *primeiro = NULL, *final;
+    formularioReclamacao *primeiro = NULL, *final, *tempBusca=NULL;
     /*struct tm *data_hora;             // struct que armazena data e hora
     time_t segundos;                        // variável para aemazenar o tempo em segundos
     time(segundos);                         // obtendo o tempo em segundos
@@ -55,17 +55,21 @@ int main() {
             exibe(primeiro);
         }
         else if (auxWhile == 3){
-            printf("Digite numero do poste que deseja buscar");
+            printf("Digite numero do poste que deseja buscar\n");
             scanf("%d", &numeroPoste);
-            busca(numeroPoste, primeiro);
+            tempBusca=busca(numeroPoste, primeiro);
+            if(tempBusca!=NULL){
+                printf("\n Poste encontrado\n Nome de quem fez o cadastro: %s Opcao de reclamacao: %d\n Descricao do problema: %s\n\n", tempBusca->nome, tempBusca->opcao, tempBusca->descricao);
+            }
+            else     printf("\nErro, poste nao econtrado, pois nao esta na lista!\n");
         }
         else if (auxWhile == 4){
-            printf("Digite numero do poste que deseja buscar a fim de atualizar o mesmo na lista");
+            printf("Digite numero do poste que deseja buscar a fim de atualizar o mesmo na lista\n");
             scanf("%d", &numeroPoste);
             atualiza(numeroPoste, primeiro);
         }
         else if (auxWhile == 5){
-            printf("Digite numero do poste que deseja buscar a fim de deletar da lista");
+            printf("Digite numero do poste que deseja buscar a fim de deletar da lista\n");
             scanf("%d", &numeroPoste);
             delete (numeroPoste, &primeiro, &final);
         }
@@ -114,13 +118,11 @@ formularioReclamacao *busca(int numeroBuscado, formularioReclamacao *primeiro){
     formularioReclamacao *temp = primeiro;
     while (temp!= NULL){
         if (temp->numeroPoste == numeroBuscado){
-            printf("\n Poste encontrado\n Nome de quem fez o cadastro: %s Opcao de reclamacao: %d\n Descricao do problema: %s\n\n", temp->nome, temp->opcao, temp->descricao);
             return temp;
         }
         temp = temp->proximo;
     }
-        printf("\nErro, poste nao econtrado, pois nao esta na lista!\n");
-        return NULL;
+    return NULL;
 }
 
 void exibe(formularioReclamacao *primeiro){
@@ -149,18 +151,19 @@ void atualiza(int numeroPoste, formularioReclamacao *primeiro) {
         printf("\n3 - Sem luz");
         scanf("%d", &p->opcao);
         if (p->opcao != 0) {
-            printf("\nDigite a sua reclamacao (maximo de 400 caracteres):  ");
+            printf("\nDigite a sua reclamacao (maximo de 400 caracteres):\n");
             fflush(stdin);
             fgets(p->descricao, 400, stdin);
         } else strcpy(p->descricao, "Sem reclamacoes");
     }
-    else printf("Nao e possivel atualizar postes que nao estao na lista");
+    else printf("Nao e possivel atualizar postes que nao estao na lista\n");
 }
 
 void delete(int number, formularioReclamacao **primeiro, formularioReclamacao **final) {
     formularioReclamacao *p, *q, *r;
     p = busca(number, *primeiro);
     if (p != NULL) {
+        printf("Poste deletado\n");
         if (p == *primeiro) { // deleting the first one
             q = p->proximo;
             free(p);
@@ -181,4 +184,5 @@ void delete(int number, formularioReclamacao **primeiro, formularioReclamacao **
             q->proximo = r;
         }
     }
+    else printf("Poste nao se encontra na lista, nao foi possivel deletar\n");
 }
