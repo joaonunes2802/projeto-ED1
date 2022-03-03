@@ -26,16 +26,24 @@ int main() {
     time(&segundos);                         // obtendo o tempo em segundos
     data_hora = localtime(&segundos); // convertendo o tempo em segundos para o tempo local
     FILE *log;
-    log = fopen("log.txt", "w+");
-    if(log == NULL){
-        printf("\nErro, arquivo de log nao pode ser aberto!");
-        exit(0);
-    }else{
-        fflush(stdin);
-        fputs("Abertura do programa!!", log);
-        fprintf(log, "\nPrograma iniciado as %d:%d:%d de %d/%d/%d", data_hora->tm_hour, data_hora->tm_min, data_hora->tm_sec, data_hora->tm_mday, data_hora->tm_mon+1, data_hora->tm_year+1900);
+    if(log = fopen("log.txt", "r")){     //Testa se o arquivo já existe
         fclose(log);
+    }else{
+        log = fopen("log.txt", "w+");
+        if (log == NULL)
+        {
+            printf("\nErro, arquivo de log nao pode ser aberto!");
+            exit(0);
+        }
+        else
+        {
+            fflush(stdin);
+            fputs("Abertura do programa!!", log);
+            fprintf(log, "\nPrograma iniciado as %d:%d:%d de %d/%d/%d", data_hora->tm_hour, data_hora->tm_min, data_hora->tm_sec, data_hora->tm_mday, data_hora->tm_mon + 1, data_hora->tm_year + 1900);
+            fclose(log);
+        }
     }
+    
 
     while (auxWhile != 9){
         printf("\n Digite 1 se deseja inserir postes:\n Digite 2 se deseja exebir a lista: \n Digite 3 se deseja buscar um poste pela posicao na lista:\n Digite 4 para atualizar um cadastro do poste:\n Digite 5 para deletar um poste:\n Digite 6 se deseja exibir o historico de operacoes realizadas:\n Digite 9 se deseja terminar o programa: \n");
