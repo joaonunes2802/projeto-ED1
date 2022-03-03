@@ -23,7 +23,7 @@ int main() {
     formularioReclamacao *primeiro = NULL, *final, *tempBusca=NULL;
     struct tm *data_hora;             // struct que armazena data e hora
     time_t segundos;                        // variável para aemazenar o tempo em segundos
-    time(segundos);                         // obtendo o tempo em segundos
+    time(&segundos);                         // obtendo o tempo em segundos
     data_hora = localtime(&segundos); // convertendo o tempo em segundos para o tempo local
     FILE *log;
     log = fopen("log.txt", "w+");
