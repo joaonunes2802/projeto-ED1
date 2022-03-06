@@ -7,8 +7,11 @@ typedef struct formularioReclamacao{
     int numeroPoste; // numero do poste der luz
     int opcao;      // opção de reclamação
     struct formularioReclamacao *proximo, *anterior;
-    char descricao[400], cpf[11], endereco[30], telefone[11]; // descrição da reclamação, cpf de quem fez a reclamação, endereço e telefone de quem fez a reclamação
-    char nome[30];           // nome de quem fez a reclamação
+    char descricao[400]; // descrição da reclamação
+    char cpf[11]; //cpf de quem fez a reclamação
+    char endereco[30]; // endereço
+    char telefone[11]; //telefone de quem fez a reclamação
+    char nome[30];  // nome de quem fez a reclamação
 } formularioReclamacao;
 
 void inserirPoste(formularioReclamacao **primeiro, formularioReclamacao **final, int inicio, int fim);
@@ -75,7 +78,7 @@ int main() {
             scanf("%d", &numeroPoste);
             tempBusca=busca(numeroPoste, primeiro);
             if(tempBusca!=NULL){
-                printf("\n Poste encontrado\n Nome de quem fez o cadastro: %s Opcao de reclamacao: %d\n Descricao do problema: %s\n\n", tempBusca->nome, tempBusca->opcao, tempBusca->descricao);
+                printf("\n Poste encontrado\n Nome de quem fez o cadastro: %s CPF: %s \n Endereco: %s Telefone: %s \n Opcao de reclamacao: %d\n Descricao do problema: %s\n\n", tempBusca->nome, tempBusca->cpf, tempBusca->endereco, tempBusca->telefone, tempBusca->opcao, tempBusca->descricao);
             }
             else     printf("\nErro, poste nao econtrado, pois nao esta na lista!\n");
         }
@@ -128,6 +131,16 @@ void inserirPoste(formularioReclamacao **primeiro, formularioReclamacao **final,
         fflush(stdin);
         printf("Escreva o nome de quem esta realizando a reclamacao:\n");
         fgets(p->nome, 30, stdin);
+        printf("Escreva o CPF de quem esta realizando a reclamacao:\n");
+        fflush(stdin);
+        fgets(p->cpf, 11, stdin);
+        printf("Escreva o endereco de quem esta realizando a reclamacao (digite no maximo 30 caracteres):\n");
+        fflush(stdin);
+        fgets(p->endereco, 30, stdin);
+        printf("Escreva o telefone de quem esta realizando a reclamacao:\n");
+        fflush(stdin);
+        fgets(p->telefone, 11, stdin);
+        fflush(stdin);
         printf("\nCaso deje realizar alguma reclamacao, digite o numero correspondente:");
         printf("\n0 - Sem reclamacoes");
         printf("\n1 - Luz queimada");
@@ -171,7 +184,10 @@ void exibe(formularioReclamacao *primeiro){
     while (p != NULL){
         printf("\nNumero do poste: %d", p->numeroPoste);
         printf("\nNome de quem fez a reclamacao: %s", p->nome);
-        printf("Numero da reclamacao: %d", p->opcao);
+        printf("CPF de quem fez a reclamacao: %s", p->cpf);
+        printf("\nEndereco de quem fez a reclamacao: %s", p->endereco);
+        printf("Telefone de quem fez a reclamacao: %s", p->telefone);
+        printf("\nNumero da reclamacao: %d", p->opcao);
         printf("\nDescricao do problema:\n ");
         printf("%s\n", p->descricao);
         p = p->proximo;
@@ -185,6 +201,15 @@ void atualiza(int numeroPoste, formularioReclamacao *primeiro) {
         fflush(stdin);
         printf("Escreva o nome de quem esta atualizando o cadastro:\n");
         fgets(p->nome, 30, stdin);
+        printf("Escreva o seu CPF:\n");
+        fflush(stdin);
+        fgets(p->cpf, 11, stdin);
+        printf("Escreva o seu endereco (digite no maximo 30 caracteres):\n");
+        fflush(stdin);
+        fgets(p->endereco, 30, stdin);
+        printf("Escreva o seu telefone:\n");
+        fflush(stdin);
+        fgets(p->telefone, 11, stdin);
         printf("\nCaso deje realizar alguma reclamacao, digite o numero correspondente:");
         printf("\n0 - Problema resolvido");
         printf("\n1 - Luz queimada");
