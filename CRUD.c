@@ -18,8 +18,10 @@ typedef struct rua{
     char setor[30]; // endereço    
     poste *numeroPostes[20];
 }rua;
+rua ruas[10];
 
-rua numeroRua[10];
+void cadastrarRua(rua vet[]);
+void buscaBinaria(rua vet[], int tamanhoVet, int numRua);
 
 void inserirPoste(rua **primeiro, rua **final, int inicio, int fim);
 rua *busca(int numeroBuscado, rua *primeiro);
@@ -258,4 +260,58 @@ void delete(int number, rua **primeiro, rua **final) {
         }
     }
     else printf("Poste nao se encontra na lista, nao foi possivel deletar\n");
+}
+
+void cadastrarRua(rua vet[]){
+    int i, qtdRuas;
+    printf("Digite quantas ruas deseja cadastrar: ");
+    scanf("%d", &qtdRuas);
+    for (i = 0; i <= qtdRuas; i++){
+        printf("\nDigite a o numero de sua rua: ");
+        scanf("%d", &vet[i].numeroRua);
+        printf("\nDigite o nome do seu setor (maximo de 30 caracteres): ");
+        fflush(stdin);
+        fgets(vet[i].setor, 30, stdin);
+    }
+}
+
+void buscaBinaria(rua vet[], int tamanhoVet, int numRua){
+    int inicio = 0, meio, fim;
+    int achado = 0;
+    int numPoste, resposta, aux = 1;
+    fim = tamanhoVet;
+    meio = fim / 2;
+    while (achado != 1 && fim > inicio){
+        if (vet[meio].numeroRua > numRua){
+            fim = meio - 1;
+            meio = (inicio + fim) / 2;
+        }else if (vet[meio].numeroRua < numRua){
+            inicio = meio + 1;
+            meio = (inicio + fim) / 2;
+        }else if (vet[meio].numeroRua == numRua){
+            achado = 1;
+        }
+    }
+    if (achado == 0){
+        printf("\nEssa rua não exite! Digite novamente\n");
+    }else if (achado == 1){
+        printf("\nA rua %d foi encontrada. Digite agora o numero da operacao que deseja realizar: \n", numRua);
+        while (aux != 0){
+            printf("1 - Realizar uma nova reclamacao; \n2 - Bucar um poste específico; \n3 - Atualizar um poste especifico; \n4 - Deletar um poste especifico; \n5 - Exibir a lista de postes dessa rua;");
+            scanf("%d", &resposta);
+            if (resposta == 1){
+                inserirPoste();
+            }else if (resposta == 2){
+                busca();
+            }else if (resposta == 3){
+                atualiza();
+            }else if (resposta == 4){
+                delete ();
+            }else if (resposta == 5){
+                exibe();
+            }
+            printf("\nAinda deseja realizar alguma operacao em algum poste dessa rua? 0 - NAO;  1 - SIM\n");
+            scanf("%d", &aux);
+        }
+    }
 }
