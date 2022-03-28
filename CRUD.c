@@ -93,7 +93,7 @@ int main() {
                 delete(numeroPoste, &primeiro[tempBuscaRua].poste, &final[tempBuscaRua].poste);
             }
             else if (auxWhile == 9){
-                auxWhile=0;
+                auxWhile2=0;
             }
         }
     }
