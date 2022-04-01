@@ -20,6 +20,7 @@ typedef struct rua{
 void cadastrarRua(rua **primeiro, rua **final, int inicio, int fim);
 void exibirRua(rua *v);
 rua *buscaRua(int numeroBuscado, rua *primeiro);
+void exibirRuaPostes(rua *primeiro);
 
 void inserirPoste(rua **busca, int inicio, int fim, char nome[][30]);
 void inserirPosteOperador(rua **busca, int inicio, int fim, char nome[][30]);
@@ -33,13 +34,14 @@ int main() {
     char nomeCliente[30];
     poste *tempBusca=NULL;
     rua *primeiro=NULL, *final=NULL, *ruaBusca=NULL;
+    printf("Instrucoes de uso:\nNo programa e dividido em duas partes: a parte do operador e a do clientes\nO operador simula um agente da prefeitura que sera responsavel pelo cadastro de ruas, mas tambem de cadastrar postes na mesma\nNo cadastro de rua devera ser informado o nome da mesma\nO cadastro de poste pelo o operador e feita de maneira automatica, ele apenas tem que digitar quantos postes vai inserir naquela determinada rua, sendo que partiremos do pressuposto que por ser um poste novo, cadastrado pelo operador, ele estara sem defeitos/reclamacoes\nNa parte do cliente, nao vai ser permitido ao mesmo a insercao de ruas, passando essa tarefa apenas a operadores\nMas sera possivel ao cliente poder inserir postes, que talvez o operador nao tenha inserido, fazer reclamacoes, excluir postes, ou atualizar as caracteristicas dos mesmos\nAs funcoes acima o operador tambem pode fazer, e no caso de haver postes com supostas reclamacoes, em uma aplicacao pratica o operador iria ate o lugar, conferiria a demanda e realizaria o conserto das irregularidades\nO projeto visa a melhora da qualidade de vida dos moradores da cidade, a facilitação na comunicação entre os agentes da prefeitura e os moradores, alem de possibilitar um maior controle da demanda e auxiliar outros serviços publico, como a seguranca\nBom uso da aplicacao!!!\n\n\n");
     while(auxWHile3!=9) {
         printf("Digite 1 para ir para a pare dos operadores\nDigite 2 para ir para a parte dos cliente:\nDigite 9 caso deseje fechar o programa\n");
         scanf("%d", &auxWHile3);
         if (auxWHile3 == 1) {
             auxWhile2 = 0;
             while (auxWhile2 != 9) {
-                printf("Digite 1 se deseja adicionar uma rua:\nDigite 2 para exibir a lista de ruas\nDigite 3 para fazer operacoes em um poste de uma rua\nDigite 9 para voltar o programa\n");
+                printf("Digite 1 se deseja adicionar uma rua:\nDigite 2 para exibir a lista de ruas\nDigite 3 para exibir todas as ruas os postes em cada uma delas\nDigite 4 para fazer operacoes em um poste de uma rua\nDigite 9 para voltar o programa\n");
                 scanf("%d", &auxWhile2);
                 if (auxWhile2 == 1) {
                     printf("Digite quantas ruas deseja inserir:\n");
@@ -48,10 +50,13 @@ int main() {
                     cadastrarRua(&primeiro, &final, inicioRua, finalRua);
                     inicioRua = finalRua;
                 }
-                if (auxWhile2 == 2) {
+                else if (auxWhile2 == 2) {
                     exibirRua(primeiro);
                 }
-                if (auxWhile2 == 3) {
+                else if(auxWhile2==3){
+                    exibirRuaPostes(primeiro);
+                }
+                else if (auxWhile2 == 4) {
                     if(primeiro!=NULL) {
                         auxWhile = 0;
                         printf("Digite o numero da rua que deseja modificar os postes:\n ");
@@ -114,12 +119,15 @@ int main() {
         } else if (auxWHile3 == 2) {
             auxWhile=0;
             while (auxWhile4 != 9) {
-                printf("Digite 1 para exibir a lista de ruas:\nDigite 2 para buscar uma rua e fazer operacoes na mesma envolvendo postes:\nDigite 9 para voltar o programa\n");
+                printf("Digite 1 para exibir a lista de ruas:\nDigite 2 para exibir todas as ruas e os postes em cada uma delas\nDigite 3 para buscar uma rua e fazer operacoes na mesma envolvendo postes:\nDigite 9 para voltar o programa\n");
                 scanf("%d", &auxWhile4);
                 if(auxWhile4==1){
                     exibirRua(primeiro);
                 }
                 else if(auxWhile4==2){
+                    exibirRuaPostes(primeiro);
+                }
+                else if(auxWhile4==3){
                     auxWhile=0;
                     ruaBusca=NULL;
                     while(ruaBusca==NULL) {
@@ -365,4 +373,23 @@ rua *buscaRua(int numeroBuscado, rua *primeiro){
         temp = temp->proximo;
     }
     return NULL;
+}
+
+void exibirRuaPostes(rua *primeiro){
+    poste *temp=NULL;
+    if(primeiro!=NULL) {
+        while (primeiro != NULL) {
+            printf("Rua numero: %d; Nome rua: %s\n", primeiro->numeroRua, primeiro->nomeRua);
+            if(primeiro->poste!=NULL){
+                temp=primeiro->poste->primeiro;
+                while(temp!=NULL){
+                    printf("Poste numero: %d; Nome do cadastro: %s;\n Descricao da reclmacao: %s\n", temp->numeroPoste, temp->nome, temp->descricao);
+                    temp=temp->proximo;
+                }
+            }
+            else printf("Nao ha poste nessa rua\n");
+            primeiro=primeiro->proximo;
+        }
+    }
+    else printf("Nao ha ruas cadastradas\n");
 }
