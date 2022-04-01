@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -5,7 +6,7 @@
 
 typedef struct poste{
     struct poste *proximo, *anterior, *primeiro, *final;
-    int numeroPoste; // numero do poste der luz
+    int numeroPoste; // numero do poste da luz
     int opcao;       // opção de reclamação
     char descricao[400]; // descrição da reclamação
     char nome[30];       // nome de quem fez a reclamação
@@ -18,19 +19,20 @@ typedef struct rua{
     struct rua *proximo, *anterior;
 } rua;
 
-void imprirString(char palavra[]);
 void cadastrarRua(rua **primeiro, rua **final, int inicio, int fim);
 void exibirRua(rua *v);
 rua *buscaRua(int numeroBuscado, rua *primeiro);
 
-void inserirPoste(rua **busca, int inicio, int fim);
+void inserirPoste(rua **busca, int inicio, int fim, char nome[][30]);
+void inserirPosteOperador(rua **busca, int inicio, int fim, char nome[][30]);
 poste *busca(int numeroBuscado, poste *primeiro);
 void exibe(poste *primeiro);
-void atualiza(int numeroPoste, poste *primeiro);
+void atualiza(int numeroPoste, poste *primeiro, char nome[][30]);
 void delete (int number, poste **primeiro, poste **final);
 
 int main() {
     int qtdPostes, auxInserir = 1, auxWhile = 9, numeroPoste, auxWhile2=9, finalRua, insercaoRua=0, inicioRua=0, tempBuscaRua, auxWHile3=0, auxWhile4=0;
+    char nomeCliente[30];
     poste *tempBusca=NULL;
     rua *primeiro=NULL, *final=NULL, *ruaBusca=NULL;
     while(auxWHile3!=9) {
@@ -40,11 +42,9 @@ int main() {
             auxWhile2 = 0;
             while (auxWhile2 != 9) {
                 printf("Digite 1 se deseja adicionar uma rua:\nDigite 2 para exibir a lista de ruas\nDigite 3 para fazer operacoes em um poste de uma rua\nDigite 9 para voltar o programa\n");
-                fflush(stdout);
                 scanf("%d", &auxWhile2);
                 if (auxWhile2 == 1) {
                     printf("Digite quantas ruas deseja inserir:\n");
-                    fflush(stdout);
                     scanf("%d", &insercaoRua);
                     finalRua = insercaoRua + inicioRua;
                     cadastrarRua(&primeiro, &final, inicioRua, finalRua);
@@ -54,56 +54,52 @@ int main() {
                     exibirRua(primeiro);
                 }
                 if (auxWhile2 == 3) {
+                    if(primeiro!=NULL) {
                     auxWhile = 0;
                     printf("Digite o numero da rua que deseja modificar os postes:\n ");
                     ruaBusca=NULL;
-                    fflush(stdout);
-                    while(ruaBusca==NULL) {
-                        scanf("%d", &tempBuscaRua);
-                        ruaBusca = buscaRua(tempBuscaRua, primeiro);
-                        if (ruaBusca == NULL){
-                            printf("\nErro, digite novamente!\n");
+                        while (ruaBusca == NULL) {
+                            scanf("%d", &tempBuscaRua);
+                            ruaBusca = buscaRua(tempBuscaRua, primeiro);
+                            if (ruaBusca == NULL) {
+                                printf("\nErro, digite novamente!\n");
+                            }
                         }
                     }
+                    else
+                        printf("Nao ha ruas cadastradas\n");
                 }
                 while (auxWhile != 9) {
                     printf("\nDigite 1 se deseja inserir postes:\nDigite 2 se deseja exebir a lista de postes:\nDigite 3 se deseja buscar um poste pelo seu numero:\nDigite 4 para atualizar um cadastro de um poste:\nDigite 5 para deletar um poste:\nDigite 9 se deseja ir para a parte de rua\n");
-                    fflush(stdout);
                     scanf("%d", &auxWhile);
+                    strcpy( nomeCliente, "Operador");
                     if (auxWhile == 1) {
                         printf("Quantos postes deseja inserir?\n");
-                        fflush(stdout);
                         scanf("%d", &qtdPostes);
                         if (qtdPostes < 9999 && (auxInserir < 9999)) {
                             qtdPostes = auxInserir + qtdPostes;
-                            inserirPoste(&ruaBusca, auxInserir, qtdPostes);
+                            inserirPosteOperador(&ruaBusca, auxInserir, qtdPostes, &nomeCliente);
                             auxInserir = qtdPostes;
                             fflush(stdin);
                         } else
                             printf("A lista nao comporta essa alocacao, ou por estar cheia, ou a quantidade de elementos a ser inserido era muito grande.\nLista limitada a 9.999 insercoes.\n");
-                        fflush(stdout);
                     } else if (auxWhile == 2) {
                         exibe(ruaBusca->poste->primeiro);
                     } else if (auxWhile == 3) {
                         printf("Digite numero do poste que deseja buscar\n");
-                        fflush(stdout);
                         scanf("%d", &numeroPoste);
                         tempBusca = busca(numeroPoste, ruaBusca->poste->primeiro);
                         if (tempBusca != NULL){
                             printf("\nPoste encontrado\nNome de quem fez o cadastro: %sOpcao de reclamacao: %d\nDescricao do problema: %s\n\n",tempBusca->nome, tempBusca->opcao, tempBusca->descricao);
-                            fflush(stdout);
                         } else{
                             printf("\nErro, poste nao econtrado, pois nao esta na lista!\n");
                         }
-                        fflush(stdout);
                     } else if (auxWhile == 4) {
                         printf("Digite numero do poste que deseja atualizar\n");
-                        fflush(stdout);
                         scanf("%d", &numeroPoste);
-                        atualiza(numeroPoste, ruaBusca->poste->primeiro);
+                        atualiza(numeroPoste, ruaBusca->poste->primeiro, &nomeCliente);
                     } else if (auxWhile == 5) {
                         printf("Digite numero do poste que deseja deletar\n");
-                        fflush(stdout);
                         scanf("%d", &numeroPoste);
                         delete(numeroPoste, &ruaBusca->poste->primeiro, &ruaBusca->poste->final);
                     } else if (auxWhile == 9) {
@@ -111,74 +107,71 @@ int main() {
                     }
                 }
             }
-
         } else if (auxWHile3 == 2) {
             auxWhile=0;
             while (auxWhile4 != 9) {
                 printf("Digite 1 para exibir a lista de ruas:\nDigite 2 para buscar uma rua e fazer operacoes na mesma envolvendo postes:\nDigite 9 para voltar o programa\n");
-                    scanf("%d", &auxWhile4);
-                    if(auxWhile4==1){
-                        exibirRua(primeiro);
-                    }
-                    else if(auxWhile4==2){
-                        auxWhile=0;
-                        ruaBusca=NULL;
-                        while(ruaBusca==NULL) {
-                            scanf("%d", &tempBuscaRua);
-                            ruaBusca = buscaRua(tempBuscaRua, primeiro);
-                            while (auxWhile!=9){
-                                printf("\nDigite 1 se deseja inserir postes:\nDigite 2 se deseja exebir a lista:\nDigite 3 se deseja buscar um poste pela posicao na lista:\nDigite 4 para atualizar um cadastro do poste:\nDigite 5 para deletar um poste:\nDigite 9 se deseja voltar o programa\n");
-                                fflush(stdout);
-                                scanf("%d", &auxWhile);
-                                if (auxWhile == 1) {
-                                    printf("Quantos postes deseja inserir?\n");
-                                    fflush(stdout);
-                                    scanf("%d", &qtdPostes);
-                                    if (qtdPostes < 9999 && (auxInserir < 9999)) {
-                                        qtdPostes = auxInserir + qtdPostes;
-                                        inserirPoste(&ruaBusca, auxInserir, qtdPostes);
-                                        auxInserir = qtdPostes;
-                                        fflush(stdin);
-                                    } else
-                                        printf("A lista nao comporta essa alocacao, ou por estar cheia, ou a quantidade de elementos a ser inserido era muito grande.\nLista limitada a 9.999 insercoes.\n");
-                                    fflush(stdout);
-                                } else if (auxWhile == 2) {
-                                    exibe(ruaBusca->poste->primeiro);
-                                } else if (auxWhile == 3) {
-                                    printf("Digite numero do poste que deseja buscar\n");
-                                    fflush(stdout);
-                                    scanf("%d", &numeroPoste);
-                                    tempBusca = busca(numeroPoste, ruaBusca->poste->primeiro);
-                                    if (tempBusca != NULL) {
-                                        printf("\nPoste encontrado\nNome de quem fez o cadastro: %sOpcao de reclamacao: %d\nDescricao do problema: %s\n",tempBusca->nome, tempBusca->opcao, tempBusca->descricao);
-                                        fflush(stdout);
-                                    } else{
-                                        printf("\nErro, poste nao econtrado, pois nao esta na lista!\n");
-                                    }
-                                    fflush(stdout);
-                                } else if (auxWhile == 4) {
-                                    printf("Digite numero do poste que deseja atualizar na lista\n");
-                                    fflush(stdout);
-                                    scanf("%d", &numeroPoste);
-                                    atualiza(numeroPoste, ruaBusca->poste->primeiro);
-                                } else if (auxWhile == 5) {
-                                    printf("Digite numero do poste que deseja deletar da lista\n");
-                                    fflush(stdout);
-                                    scanf("%d", &numeroPoste);
-                                    delete(numeroPoste, &ruaBusca->poste->primeiro, &ruaBusca->poste->final);
-                                } else if (auxWhile == 9) {
-                                    auxWhile4=0;
+                scanf("%d", &auxWhile4);
+                if(auxWhile4==1){
+                    exibirRua(primeiro);
+                }
+                else if(auxWhile4==2){
+                    auxWhile=0;
+                    ruaBusca=NULL;
+                    while(ruaBusca==NULL) {
+                        scanf("%d", &tempBuscaRua);
+                        ruaBusca = buscaRua(tempBuscaRua, primeiro);
+                        while (auxWhile!=9){
+                            printf("\nDigite 1 se deseja inserir postes:\nDigite 2 se deseja exebir a lista:\nDigite 3 se deseja buscar um poste pela posicao na lista:\nDigite 4 para atualizar um cadastro do poste:\nDigite 5 para deletar um poste:\nDigite 9 se deseja voltar o programa\n");
+                            scanf("%d", &auxWhile);
+                            if (auxWhile == 1) {
+                                printf("Quantos postes deseja inserir?\n");
+                                scanf("%d", &qtdPostes);
+                                if (qtdPostes < 9999 && (auxInserir < 9999)) {
+                                    qtdPostes = auxInserir + qtdPostes;
+                                    fflush(stdin);
+                                    printf("Escreva o nome de quem esta realizando a reclamacao:\n");
+                                    fgets(nomeCliente, 30, stdin);
+                                    inserirPoste(&ruaBusca, auxInserir, qtdPostes, &nomeCliente);
+                                    auxInserir = qtdPostes;
+                                    fflush(stdin);
+                                } else
+                                    printf("A lista nao comporta essa alocacao, ou por estar cheia, ou a quantidade de elementos a ser inserido era muito grande.\nLista limitada a 9.999 insercoes.\n");
+                            } else if (auxWhile == 2) {
+                                exibe(ruaBusca->poste->primeiro);
+                            } else if (auxWhile == 3) {
+                                printf("Digite numero do poste que deseja buscar\n");
+                                scanf("%d", &numeroPoste);
+                                tempBusca = busca(numeroPoste, ruaBusca->poste->primeiro);
+                                if (tempBusca != NULL) {
+                                    printf("\nPoste encontrado\nNome de quem fez o cadastro: %sOpcao de reclamacao: %d\nDescricao do problema: %s\n",tempBusca->nome, tempBusca->opcao, tempBusca->descricao);
+                                } else{
+                                    printf("\nErro, poste nao econtrado, pois nao esta na lista!\n");
                                 }
+                            } else if (auxWhile == 4) {
+                                fflush(stdin);
+                                printf("Escreva o nome de quem esta atualizando o cadastro:\n");
+                                fgets(nomeCliente, 30, stdin);
+                                printf("Digite numero do poste que deseja atualizar na lista\n");
+                                scanf("%d", &numeroPoste);
+                                atualiza(numeroPoste, ruaBusca->poste->primeiro, &nomeCliente);
+                            } else if (auxWhile == 5) {
+                                printf("Digite numero do poste que deseja deletar da lista\n");
+                                scanf("%d", &numeroPoste);
+                                delete(numeroPoste, &ruaBusca->poste->primeiro, &ruaBusca->poste->final);
+                            } else if (auxWhile == 9) {
+                                auxWhile4=0;
                             }
                         }
                     }
+                }
             }
         }
     }
     return 0;
 }
 
-void inserirPoste(rua **busca, int inicio, int fim) {
+void inserirPoste(rua **busca, int inicio, int fim, char nome[][30]) {
     int m = inicio, k = fim;
     poste *p=NULL, *q=NULL;
     for (m; m < k; m++) {
@@ -188,28 +181,49 @@ void inserirPoste(rua **busca, int inicio, int fim) {
         p->numeroPoste=m;
         printf("Poste numero: %d\n", p->numeroPoste);
         fflush(stdin);
-        fflush(stdout);
-        printf("Escreva o nome de quem esta realizando a reclamacao:\n");
-        fflush(stdout);
-        fgets(p->nome, 30, stdin);
+        strcpy( p->nome, *nome);
         printf("\nCaso deje realizar alguma reclamacao, digite o numero correspondente:");
-        fflush(stdout);
         printf("\n0 - Sem reclamacoes");
-        fflush(stdout);
         printf("\n1 - Luz queimada");
-        fflush(stdout);
         printf("\n2 - Luz piscando");
-        fflush(stdout);
         printf("\n3 - Sem luz\n");
         scanf("%d", &p->opcao);
-        fflush(stdout);
-        if (p->opcao == 0) strcpy(p->descricao, "Sem reclamacoes");
+        if (p->opcao == 0) strcpy(p->descricao, "Sem reclamacoes\n");
         else {
-            printf("\nDigite a sua reclamacao (maximo de 400 caracteres):  ");
-            fflush(stdout);
+            printf("\nDigite a sua reclamacao (maximo de 400 caracteres):\n");
             fflush(stdin);
             fgets(p->descricao, 400, stdin);
         }
+        p->proximo=NULL;
+        p->anterior=NULL;
+        if((*busca)->poste==NULL){
+            (*busca)->poste=p;
+            (*busca)->poste->primeiro=p;
+            (*busca)->poste->final=(*busca)->poste->primeiro;
+            p->anterior=NULL;
+        }
+        else {
+            q = ((*busca)->poste)->final;
+            ((*busca)->poste)->final=p;
+            (*busca)->poste->final->anterior=q;
+            q->proximo=((*busca)->poste)->final;
+        }
+    }
+}
+
+void inserirPosteOperador(rua **busca, int inicio, int fim, char nome[][30]) {
+    int m = inicio, k = fim;
+    poste *p=NULL, *q=NULL;
+    for (m; m < k; m++) {
+        p = (poste *) malloc(sizeof(poste));
+        p->primeiro=NULL;
+        p->final=NULL;
+        p->numeroPoste=m;
+        printf("Poste numero: %d\n", p->numeroPoste);
+        fflush(stdin);
+        strcpy( p->nome, *nome);
+        p->opcao=0;
+        strcpy(p->descricao, "Sem reclamacoes\n");
         p->proximo=NULL;
         p->anterior=NULL;
         if((*busca)->poste==NULL){
@@ -242,45 +256,31 @@ void exibe(poste *primeiro){
     poste *p = primeiro;
     while (p != NULL){
         printf("\nNumero do poste: %d", p->numeroPoste);
-        fflush(stdout);
         printf("\nNome de quem fez a reclamacao: %s", p->nome);
-        fflush(stdout);
-        printf("Descricao do problema:\n ");
-        fflush(stdout);
+        printf("\nDescricao do problema:\n ");
         printf("%s\n", p->descricao);
         p = p->proximo;
     }
 }
 
-void atualiza(int numeroPoste, poste *primeiro) {
+void atualiza(int numeroPoste, poste *primeiro, char nome[][30]) {
     poste *p;
     p = busca(numeroPoste, primeiro);
     if (p != NULL) {
-        fflush(stdin);
-        printf("Escreva o nome de quem esta atualizando o cadastro:\n");
-        fflush(stdout);
-        fgets(p->nome, 30, stdin);
+        strcpy( p->nome, *nome);
         printf("\nCaso deje realizar alguma reclamacao, digite o numero correspondente:");
-        fflush(stdout);
         printf("\n0 - Problema resolvido");
-        fflush(stdout);
         printf("\n1 - Luz queimada");
-        fflush(stdout);
         printf("\n2 - Luz piscando");
-        fflush(stdout);
-        printf("\n3 - Sem luz");
-        fflush(stdout);
+        printf("\n3 - Sem luz\n");
         scanf("%d", &p->opcao);
         if (p->opcao != 0) {
             printf("\nDigite a sua reclamacao (maximo de 400 caracteres):\n");
-            fflush(stdout);
             fflush(stdin);
             fgets(p->descricao, 400, stdin);
-        } else strcpy(p->descricao, "Sem reclamacoes");
-        fflush(stdout);
+        } else strcpy(p->descricao, "Sem reclamacoes\n");
     }
     else printf("Nao e possivel atualizar postes que nao estao na lista\n");
-    fflush(stdout);
 }
 
 void delete(int number, poste **primeiro, poste **final) {
@@ -288,8 +288,7 @@ void delete(int number, poste **primeiro, poste **final) {
     p = busca(number, *primeiro);
     if (p != NULL) {
         printf("Poste deletado\n");
-        fflush(stdout);
-        if (p == *primeiro) { // deleting the first one
+        if (p == *primeiro) {
             q = p->proximo;
             free(p);
             p = q;
@@ -310,7 +309,6 @@ void delete(int number, poste **primeiro, poste **final) {
         }
     }
     else printf("Poste nao se encontra na lista, nao foi possivel deletar\n");
-    fflush(stdout);
 }
 
 void cadastrarRua(rua **primeiro, rua **final, int inicio, int fim){
@@ -320,10 +318,8 @@ void cadastrarRua(rua **primeiro, rua **final, int inicio, int fim){
         p = (rua *) malloc(sizeof(rua));
         p->numeroRua=m;
         printf("Rua numero: %d\n", p->numeroRua);
-        fflush(stdout);
         fflush(stdin);
         printf("Escreva o nome da rua:\n");
-        fflush(stdout);
         fgets(p->nomeRua, 30, stdin);
         p->proximo=NULL;
         p->poste=NULL;
@@ -341,11 +337,11 @@ void cadastrarRua(rua **primeiro, rua **final, int inicio, int fim){
     }
 }
 
-
 void exibirRua(rua *v){
+    if(v==NULL)
+        printf("Nao ha ruas cadastradas, espere o operador fazer o cadastro das mesmas\n");
     while(v!=NULL){
         printf("Rua numero: %d; Nome: %s\n", v->numeroRua, v->nomeRua);
-        fflush(stdout);
         v=v->proximo;
     }
 }
