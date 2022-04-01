@@ -218,9 +218,9 @@ void cadastrarRua(rua **primeiro, rua **final, int inicio, int fim){    /*Cadast
     }
 }
 
-void atualizaRua(int numeroBuscado, rua *primeiro){     /*Atualiza uma rua já exitente, por meio da digitação do número da rua que desja ser atualizada*/
+void atualizaRua(int numeroRua, rua *primeiro){     /*Atualiza uma rua já exitente, por meio da digitação do número da rua que desja ser atualizada*/
     rua *tempAux=NULL;
-    tempAux= buscaRua(numeroBuscado, primeiro); /*Chama a função de busca para buscar a rua a ser atualizada na mesma lista que foi passado antes*/
+    tempAux= buscaRua(numeroRua, primeiro); /*Chama a função de busca para buscar a rua a ser atualizada na mesma lista que foi passado antes*/
     printf("Digite o novo para a rua %d\n", tempAux->numeroRua);
     fflush(stdin);
     printf("Escreva o nome da rua:\n");
@@ -359,7 +359,7 @@ void exibePoste(poste *primeiro){   /*Exibe todos os postes de uma rua*/
     int numeroPoste=0;
     while (p != NULL){
         printf("\nNumero do poste: %d", p->numeroPoste);
-        printf("\nNome de quem fez a reclamacao: %s", p->nome);
+        printf("\nNome de quem fez o cadastro/reclamacao: %s", p->nome);
         printf("\nDescricao do problema:\n ");
         printf("%s\n", p->descricao);
         p = p->proximo;
@@ -372,7 +372,7 @@ void atualizaPoste(int numeroPoste, poste *primeiro, char nome[][30]) { /*Atuali
     poste *p;                                                           /*Essa função será usada por um cliente, sendo assim, ela pega o nome de quem está fazendo a nova*/
     p = buscaPoste(numeroPoste, primeiro);                              /*Reclamação, e a nova descrição da reclamação*/
     /*Primeiro ela faz a busca do poste, para ver se ele existe ou não*/
-    if (p != NULL) {                    
+    if (p != NULL) {
         strcpy( p->nome, *nome);
         printf("\nCaso deje realizar alguma reclamacao, digite o numero correspondente:");
         printf("\n0 - Problema resolvido");
