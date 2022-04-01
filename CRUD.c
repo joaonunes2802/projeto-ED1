@@ -79,13 +79,10 @@ int main() {
                     if (auxWhile == 1) {
                         printf("Quantos postes deseja inserir?\n");
                         scanf("%d", &qtdPostes);
-                        if (qtdPostes < 9999 && (auxInserir < 9999)) {
-                            qtdPostes = auxInserir + qtdPostes;
-                            inserirPosteOperador(&ruaBusca, auxInserir, qtdPostes, &nomeCliente);
-                            auxInserir = qtdPostes;
-                            fflush(stdin);
-                        } else
-                            printf("A lista nao comporta essa alocacao, ou por estar cheia, ou a quantidade de elementos a ser inserido era muito grande.\nLista limitada a 9.999 insercoes.\n");
+                        qtdPostes = auxInserir + qtdPostes;
+                        inserirPosteOperador(&ruaBusca, auxInserir, qtdPostes, &nomeCliente);
+                        auxInserir = qtdPostes;
+                        fflush(stdin);
                     }
                     if(ruaBusca->poste!=NULL) {
                         if (auxWhile == 2) {
@@ -139,7 +136,6 @@ int main() {
                             if (auxWhile == 1) {
                                 printf("Quantos postes deseja inserir?\n");
                                 scanf("%d", &qtdPostes);
-                                if (qtdPostes < 9999 && (auxInserir < 9999)) {
                                     qtdPostes = auxInserir + qtdPostes;
                                     fflush(stdin);
                                     printf("Escreva o nome de quem esta realizando a reclamacao:\n");
@@ -147,8 +143,6 @@ int main() {
                                     inserirPoste(&ruaBusca, auxInserir, qtdPostes, &nomeCliente);
                                     auxInserir = qtdPostes;
                                     fflush(stdin);
-                                } else
-                                    printf("A lista nao comporta essa alocacao, ou por estar cheia, ou a quantidade de elementos a ser inserido era muito grande.\nLista limitada a 9.999 insercoes.\n");
                             }
                             if (ruaBusca->poste != NULL) {
                                 if (auxWhile == 2) {
@@ -272,13 +266,16 @@ poste *busca(int numeroBuscado, poste *primeiro){
 
 void exibe(poste *primeiro){
     poste *p = primeiro;
+    int numeroPoste=0;
     while (p != NULL){
         printf("\nNumero do poste: %d", p->numeroPoste);
         printf("\nNome de quem fez a reclamacao: %s", p->nome);
         printf("\nDescricao do problema:\n ");
         printf("%s\n", p->descricao);
         p = p->proximo;
+        numeroPoste++;
     }
+    printf("Quantidade de postes nessa rua: %d\n", numeroPoste);
 }
 
 void atualiza(int numeroPoste, poste *primeiro, char nome[][30]) {
@@ -356,12 +353,15 @@ void cadastrarRua(rua **primeiro, rua **final, int inicio, int fim){
 }
 
 void exibirRua(rua *v){
+    int numeroRua=0;
     if(v==NULL)
         printf("Nao ha ruas cadastradas, espere o operador fazer o cadastro das mesmas\n");
     while(v!=NULL){
         printf("Rua numero: %d; Nome: %s\n", v->numeroRua, v->nomeRua);
         v=v->proximo;
+        numeroRua++;
     }
+    printf("Quantidade de ruas: %d\n", numeroRua);
 }
 
 rua *buscaRua(int numeroBuscado, rua *primeiro){
@@ -377,6 +377,7 @@ rua *buscaRua(int numeroBuscado, rua *primeiro){
 
 void exibirRuaPostes(rua *primeiro){
     poste *temp=NULL;
+    int numeroRua=0, numeroPoste=0;
     if(primeiro!=NULL) {
         while (primeiro != NULL) {
             printf("Rua numero: %d; Nome rua: %s\n", primeiro->numeroRua, primeiro->nomeRua);
@@ -385,11 +386,14 @@ void exibirRuaPostes(rua *primeiro){
                 while(temp!=NULL){
                     printf("Poste numero: %d; Nome do cadastro: %s;\n Descricao da reclmacao: %s\n", temp->numeroPoste, temp->nome, temp->descricao);
                     temp=temp->proximo;
+                    numeroPoste++;
                 }
             }
             else printf("Nao ha poste nessa rua\n");
             primeiro=primeiro->proximo;
+            numeroRua++;
         }
+        printf("Quantidade de rua: %d; Quantidade de postes: %d;\n", numeroRua, numeroPoste);
     }
     else printf("Nao ha ruas cadastradas\n");
 }
