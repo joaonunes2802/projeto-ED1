@@ -5,7 +5,9 @@
  * sendo uma para simular as ruas de uma cidade, e dentro dessa lista há uma conexão para outra lista que simula os postes de cada rua.
  * Além disso, na implementação do projeto, buscando torná-lo mais realista, foi feito dois menus, sendo um para um operador da companhia de luz,
  * e outro para o usuário final, ou seja, o cidadão. Éimportante salientar que o projeto se trata de um protótipo, sendo assim, podem haver
- * funcionalidades que não estão presentes no programa
+ * funcionalidades que não estão presentes no programa. Além disso, por se tratar de uma aplicação teórica, é considerado que o usuário é honesto, ou seja,
+ * ele irá sempre digitar os dados da maneira correta, não sendo necessário fazer a verificação dos dados digitados, mas em uma versão mais real,
+ * essa verificação seria feita.
  * @version 0.1
  * @date 2022-04-01
  *
