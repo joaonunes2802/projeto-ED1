@@ -113,7 +113,7 @@ int main() {
                             scanf("%d", &numeroPoste);
                             tempBusca = buscaPoste(numeroPoste, ruaBusca->poste->primeiro);
                             if (tempBusca != NULL) {
-                                printf("\nPoste encontrado\nNome de quem fez o cadastro: %sOpcao de reclamacao: %d\nDescricao do problema: %s\n\n",
+                                printf("\nPoste encontrado\nNome de quem fez o cadastro: %s\nOpcao de reclamacao: %d\nDescricao do problema: %s\n\n",
                                        tempBusca->nome, tempBusca->opcao, tempBusca->descricao);
                             } else {
                                 printf("\nErro, poste nao econtrado, pois nao esta na lista!\n");
@@ -184,7 +184,7 @@ int main() {
                                 scanf("%d", &numeroPoste);
                                 tempBusca = buscaPoste(numeroPoste, ruaBusca->poste->primeiro);
                                 if (tempBusca != NULL) {
-                                    printf("\nPoste encontrado\nNome de quem fez o cadastro: %sOpcao de reclamacao: %d\nDescricao do problema: %s\n",
+                                    printf("\nPoste encontrado\nNome de quem fez o cadastro: %s\nOpcao de reclamacao: %d\nDescricao do problema: %s\n",
                                            tempBusca->nome, tempBusca->opcao, tempBusca->descricao);
                                 } else {
                                     printf("\nErro, poste nao econtrado, pois nao esta na lista!\n");
@@ -241,11 +241,15 @@ void cadastrarRua(rua **primeiro, rua **final, int inicio, int fim){    /*Cadast
 
 void atualizaRua(int numeroRua, rua *primeiro){     /*Atualiza uma rua já exitente, por meio da digitação do número da rua que desja ser atualizada*/
     rua *tempAux=NULL;
-    tempAux= buscaRua(numeroRua, primeiro); /*Chama a função de busca para buscar a rua a ser atualizada na mesma lista que foi passado antes*/
-    printf("Digite o novo para a rua %d\n", tempAux->numeroRua);
-    fflush(stdin);
-    printf("Escreva o nome da rua:\n");
-    fgets(tempAux->nomeRua, 30, stdin);
+    tempAux= buscaRua(numeroRua, primeiro);/*Chama a função de busca para buscar a rua a ser atualizada na mesma lista que foi passado antes*/
+    if(tempAux!=NULL) {
+        printf("Digite o novo para a rua %d\n", tempAux->numeroRua);
+        fflush(stdin);
+        printf("Escreva o nome da rua:\n");
+        fgets(tempAux->nomeRua, 30, stdin);
+    }
+    else
+        printf("Nao ha rua com esse numero\n");
 }
 
 rua *buscaRua(int numeroBuscado, rua *primeiro){    /*Busca uma rua pelo seu número*/
@@ -391,10 +395,9 @@ void exibePoste(poste *primeiro){   /*Exibe todos os postes de uma rua*/
 }
 
 void atualizaPoste(int numeroPoste, poste *primeiro, char nome[][30]) { /*Atualiza um determinado poste de uma rua*/
-    poste *p;                                                           /*Essa função será usada por um cliente, sendo assim, ela pega o nome de quem está fazendo a nova*/
-    p = buscaPoste(numeroPoste, primeiro);                              /*Reclamação, e a nova descrição da reclamação*/
-    /*Primeiro ela faz a busca do poste, para ver se ele existe ou não*/
-    if (p != NULL) {
+    poste *p;  // O operador pode usa-la para informar que a reclamacao do cliente nao persiste mais, por exemplo o caso em que o defeito é consertado*/
+    p = buscaPoste(numeroPoste, primeiro); /*Primeiro ela faz a busca do poste, para ver se ele existe ou não*/
+    if (p != NULL) { //O cliente usa a mesma para informar uma nova condição de um poste.
         strcpy( p->nome, *nome);
         printf("\nCaso deje realizar alguma reclamacao, digite o numero correspondente:");
         printf("\n0 - Problema resolvido");
@@ -412,7 +415,7 @@ void atualizaPoste(int numeroPoste, poste *primeiro, char nome[][30]) { /*Atuali
 }
 
 void deletePoste(int number, rua **rua) { /*Faz a busca de um poste em uma rua, e se ele existir, deleta ele*/
-    poste *p, *q, *r;
+    poste *p, *q, *r;                     //Função pensada casa um poste seja removido, ou identifica erros no cadastro em que uma rua tem mais postes no sistema do que na realidade;
     p = buscaPoste(number, (*rua)->poste->primeiro);
     if (p != NULL) {
         printf("Poste deletado\n");
