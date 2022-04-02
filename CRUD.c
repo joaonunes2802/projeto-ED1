@@ -45,7 +45,10 @@ void exibePoste(poste *primeiro);
 void atualizaPoste(int numeroPoste, poste *primeiro, char nome[][30]);
 void deletePoste(int number, rua **rua);
 int main() {
-    int qtdPostes, auxInserir = 1, auxWhile = 9, numeroPoste, auxWhile2=9, finalRua, insercaoRua=0, inicioRua=0, tempBuscaRua, auxWHile3=0, auxWhile4=0;//auxwhiles servem para auxiliar os laços
+    int qtdPostes, auxInserir = 1, auxWhile = 9, numeroPoste, auxWhile2=9, finalRua, insercaoRua=0, inicioRua=0, tempBuscaRua, auxWHile3=0, auxWhile4=0;
+    //auxwhiles servem para auxiliar os laços da main, a fim de criar blocos diferente de codigo para cada situação. 
+    // QtdPostes, auxInserir, numeroPoste, finalRua, inicioRua sao variaveis a fim de termos o controle de quantos postes/ruas ja foram inseridos. Alem disso, compõe o numeroPoste/numeroRua
+    //tempBuscaRua serve como um temporaria quando desejamos buscar uma rua
     char nomeCliente[30];
     poste *tempBusca=NULL;
     rua *primeiro=NULL, *final=NULL, *ruaBusca=NULL;
