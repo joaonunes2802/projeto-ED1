@@ -1,6 +1,6 @@
 /**
  * @file CRUD.c
- * @author João Pedro dos Santos Nunes e Pedro Siade de Oliveira (nunesjoao@discente.ufg.br) e (pedrosiade@discente.ufg.br)
+ * @author João Pedro dos Santos Nunes(202004720) e Pedro Siade Ferreira(202004734); (nunesjoao@discente.ufg.br) e (pedrosiade@discente.ufg.br)
  * @brief Esse projeto final tem como objetivo simular um sistema de gerenciamento de iluminação pública, em que contém 2 listas,
  * sendo uma para simular as ruas de uma cidade, e dentro dessa lista há uma conexão para outra lista que simula os postes de cada rua.
  * Além disso, na implementação do projeto, buscando torná-lo mais realista, foi feito dois menus, sendo um para um operador da companhia de luz,
